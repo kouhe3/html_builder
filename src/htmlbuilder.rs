@@ -77,9 +77,9 @@ macro_rules! define_element {
             )*
         }
 
-        impl FnOnce<(Vec<Element>,)> for $name {
+        impl<T: Into<Vec<Element>>> FnOnce<(T,)> for $name {
             type Output = Element;
-            extern "rust-call" fn call_once(self, args: (Vec<Element>,)) -> Self::Output {
+            extern "rust-call" fn call_once(self, args: (T,)) -> Self::Output {
                 let mut attributes = Vec::new();
                 $(
                     if let Some(val) = self.$attr {
@@ -88,13 +88,14 @@ macro_rules! define_element {
                 )*
                 Element::Tag(Tag {
                     name: $tag,
-                    children: args.0,
+                    children: args.0.into(),
                     attributes,
                 })
             }
         }
     };
 }
+
 
 define_element!(Html, "html", lang);
 define_element!(Head, "head",);

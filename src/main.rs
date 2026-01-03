@@ -3,34 +3,35 @@
 use std::vec;
 mod htmlbuilder;
 use htmlbuilder::*;
-fn 略<T>() -> T
+fn default<T>() -> T
 where
     T: Default,
 {
     Default::default()
 }
+
 fn main() {
-    let document = Html { ..略() }(vec![
-        Head { ..略() }(vec![Title { ..略() }(vec![Element::Text("Website title")])]),
-        Body { ..略() }(vec![
+    let document = Html { ..default() }([
+        Head { ..default() }([Title { ..default() }(["Website title".into()])]),
+        Body { ..default() }([
             Div {
-                id: Some("header"),
-                ..略()
-            }(vec![H1 { ..略() }(vec![Element::Text("Some Title")])]),
+                id: "header".into(),
+                ..default()
+            }([H1 { ..default() }(["Some Title".into()])]),
             Div {
-                id: Some("content"),
-                ..略()
-            }(vec![
-                P { ..略() }(vec![Element::Text("Some text")]),
-                Ul { ..略() }(vec![
-                    Li { ..略() }(vec![Element::Text("list 1")]),
-                    Li { ..略() }(vec![Element::Text("list 2")]),
+                id: "content".into(),
+                ..default()
+            }([
+                P { ..default() }(["Some text".into()]),
+                Ul { ..default() }([
+                    Li { ..default() }(["list 1".into()]),
+                    Li { ..default() }(["list 2".into()]),
                 ]),
             ]),
             Div {
-                id: Some("footer"),
-                ..略()
-            }(vec![P { ..略() }(vec![Element::Text("© 2025")])]),
+                id: "footer".into(),
+                ..default()
+            }([P { ..default() }(["© 2025".into()])]),
         ]),
     ]);
     println!("{:?}", document);
