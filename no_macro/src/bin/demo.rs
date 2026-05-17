@@ -1,31 +1,32 @@
-#![feature(unboxed_closures)]
-#![feature(fn_traits)]
 #![feature(default_field_values)]
 
 use html_builder::*;
 
 fn main() {
-    let document = Html { .. }([
-        Head {}([Title {}(["Website title".into()])]),
-        Body {}([
+    let document = Html { .. }.child([
+        Head {}.child([Title {}.child(["Website title".into()])]),
+        Body {}.child([
             Div {
                 id: "header".into(),
                 ..
-            }([H1 { .. }(["Some Title".into()])]),
+            }
+            .child([H1 { .. }.child(["Some Title".into()])]),
             Div {
                 id: "content".into(),
                 ..
-            }([
-                P { .. }(["Some text".into()]),
-                Ul { .. }([
-                    Li { .. }(["list 1".into()]),
-                    Li { .. }(["list 2".into()]),
+            }
+            .child([
+                P { .. }.child(["Some text".into()]),
+                Ul { .. }.child([
+                    Li { .. }.child(["list 1".into()]),
+                    Li { .. }.child(["list 2".into()]),
                 ]),
             ]),
             Div {
                 id: "footer".into(),
                 ..
-            }([P { .. }(["© 2025".into()])]),
+            }
+            .child([P { .. }.child(["© 2025".into()])]),
         ]),
     ]);
     println!("{:?}", document);

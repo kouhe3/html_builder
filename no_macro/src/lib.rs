@@ -1,5 +1,4 @@
 #![feature(unboxed_closures)]
-#![feature(fn_traits)]
 #![feature(default_field_values)]
 use std::fmt::Debug;
 pub enum Element {
@@ -50,27 +49,23 @@ impl Debug for Tag {
         Ok(())
     }
 }
-
 macro_rules! define_element {
     ($name:ident, $tag:expr, $($attr:ident),*) => {
         pub struct $name {
-            $(
-                pub $attr: Option<&'static str> = None,
-            )*
+            $(pub $attr: Option<&'static str> = None,)*
         }
 
-        impl<T: Into<Vec<Element>>> FnOnce<(T,)> for $name {
-            type Output = Element;
-            extern "rust-call" fn call_once(self, args: (T,)) -> Self::Output {
-                let mut attributes = Vec::new();
-                $(
-                    if let Some(val) = self.$attr {
-                        attributes.push((stringify!($attr), val));
-                    }
-                )*
+        impl $name {
+            pub fn child<T: Into<Vec<Element>>>(self, children: T) -> Element {
+               let attributes: Vec<(&'static str, &'static str)> =
+                    std::iter::empty()
+                    $(
+                        .chain(self.$attr.into_iter().map(|val| (stringify!($attr), val)))
+                    )*
+                    .collect();
                 Element::Tag(Tag {
                     name: $tag,
-                    children: args.0.into(),
+                    children: children.into(),
                     attributes,
                 })
             }
