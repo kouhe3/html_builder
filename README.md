@@ -1,0 +1,1 @@
+This repository show use Rust's unstable features to build HTML without macros
